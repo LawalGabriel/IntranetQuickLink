@@ -1,72 +1,153 @@
 @import '~@fluentui/react/dist/sass/References.scss';
 
 .intranetQuickLink {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', 'Segoe UI Web (West European)', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;
   
   .container {
-    padding: 20px;
+    padding: 24px;
     background-color: #f8f9fa;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    max-width: 300px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    max-width: 900px; // Slightly increased
+    min-width: 320px;
     margin: 0 auto;
+    box-sizing: border-box;
+    
+    @media (max-width: 640px) {
+      padding: 16px;
+      max-width: 100%;
+    }
   }
 
-  .title {
-    font-size: 18px;
-    font-weight: 600;
-    // color will be set inline from props
-    margin: 0 0 15px 0;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+  .header {
+    margin-bottom: 24px;
     text-align: center;
   }
 
-  .linksList {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    max-height: 200px; /* Height for 4 rows */
+  .title {
+    font-size: 22px; // Slightly larger
+    font-weight: 600;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid rgba(0, 120, 212, 0.2);
+  }
+
+  .gridContainer {
+    width: 100%;
+  }
+
+  .grid {
+    display: grid;
+    gap: 20px; // Increased gap
     overflow-y: auto;
-    padding-right: 4px;
+    padding: 8px 4px 16px 4px;
+    box-sizing: border-box;
     
+    // Dynamic columns based on itemsPerRow prop
+    @media (min-width: 1024px) {
+      // Desktop - controlled by props via inline style
+    }
+    
+    @media (max-width: 1023px) and (min-width: 769px) {
+      grid-template-columns: repeat(3, 1fr); // 3 columns on medium screens
+    }
+    
+    @media (max-width: 768px) and (min-width: 481px) {
+      grid-template-columns: repeat(2, 1fr); // 2 columns on tablets
+      gap: 16px;
+    }
+    
+    @media (max-width: 480px) {
+      grid-template-columns: repeat(2, 1fr); // 2 columns on mobile
+      gap: 12px;
+    }
+
     /* Custom scrollbar */
     &::-webkit-scrollbar {
-      width: 6px;
+      width: 8px;
     }
     
     &::-webkit-scrollbar-track {
       background: #f1f1f1;
-      border-radius: 3px;
+      border-radius: 4px;
     }
     
     &::-webkit-scrollbar-thumb {
       background: #c1c1c1;
-      border-radius: 3px;
+      border-radius: 4px;
+      
+      &:hover {
+        background: #a8a8a8;
+      }
     }
   }
 
-  .linkItem {
+  .gridItem {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    padding: 12px;
-    // background-color and color will be set inline from props
-    border: 1px solid #e1e1e1;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.2s ease;
+    padding: 24px 16px; // Increased padding
+    border: 1px solid var(--border-color, #e1e1e1);
+    border-radius: 8px;
+    transition: all 0.3s ease;
     text-align: center;
-    min-height: 44px;
+    min-height: 140px; // Increased height
+    cursor: pointer;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
 
     &:hover {
-      background-color: var(--row-hover-color, #f3f2f1) !important;
-      border-color: #c8c6c4;
-      transform: translateY(-1px);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background-color: var(--item-hover-color, #f3f2f1) !important;
+      border-color: var(--icon-color, #0078d4);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      
+      .itemIcon {
+        transform: scale(1.15);
+      }
     }
+
+    &:active {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .itemIcon {
+    margin-bottom: 16px;
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px; // Increased size
+    height: 56px;
+    
+    .icon {
+      font-size: 36px; // Increased size
+      color: var(--icon-color, #0078d4);
+      
+      &::before {
+        color: inherit;
+      }
+    }
+  }
+
+  .itemTitle {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-clamp: 2;
   }
 
   .loadingContainer {
@@ -74,22 +155,23 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 40px 20px;
+    padding: 80px 20px;
+    min-height: 400px;
   }
 
   .spinner {
     border: 4px solid rgba(0, 120, 212, 0.1);
     border-left-color: #0078d4;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     animation: spin 1s linear infinite;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
   }
 
   .loadingText {
     color: #666;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 500;
   }
 
@@ -97,11 +179,17 @@
     background-color: #0078d4;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 12px 28px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
-    margin-top: 15px;
+    font-weight: 500;
+    margin-top: 20px;
+    transition: background-color 0.2s ease;
+    
+    &:hover {
+      background-color: #106ebe;
+    }
   }
 
   .noItems {
@@ -109,26 +197,31 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 30px 20px;
+    padding: 80px 20px;
     text-align: center;
+    min-height: 400px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    border: 2px dashed #e1e1e1;
   }
 
   .noItemsIcon {
-    font-size: 36px;
+    font-size: 56px;
     color: #adb5bd;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
 
   .noItemsText {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
     color: #6c757d;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
   }
 
   .noItemsSubtext {
-    font-size: 13px;
+    font-size: 15px;
     color: #adb5bd;
+    max-width: 350px;
   }
 
   @keyframes spin {

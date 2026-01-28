@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react/self-closing-comp */
 /* eslint-disable no-void */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
@@ -17,14 +19,59 @@ const IntranetQuickLink: React.FC<IIntranetQuickLinkProps> = (props) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const spRef = useRef<any>(null);
 
-  // Set default colors if not provided
+  // Default colors from props
   const headerColor = props.headerColor || '#333333';
-  const rowColor1 = props.rowColor1 || '#ffffff';
-  const rowColor2 = props.rowColor2 || '#f8f9fa';
-  const rowTextColor = props.rowTextColor || '#333333';
-  const rowHoverColor1 = props.rowHoverColor1 || '#f3f2f1';
-  const rowHoverColor2 = props.rowHoverColor2 || '#f3f2f1';
-  const maxRows = props.maxRows || 4;
+  const itemBgColor = props.itemBgColor || '#ffffff';
+  const itemTextColor = props.itemTextColor || '#333333';
+  const itemHoverColor = props.itemHoverColor || '#f3f2f1';
+  const iconColor = props.iconColor || '#0078d4';
+  const borderColor = props.borderColor || '#e1e1e1';
+  const showBorder = props.showBorder !== false; // default to true
+  
+  // Grid configuration from props
+  const maxItems = props.maxItems || 12;
+  const itemsPerRow = props.itemsPerRow || 4;
+
+  // Map icon names based on title
+  const getIconName = (title: string): string => {
+    const titleLower = title.toLowerCase();
+    
+    const iconMap: { [key: string]: string } = {
+      'word': 'WordDocument',
+      'excel': 'ExcelDocument',
+      'powerpoint': 'PowerPointDocument',
+      'teams': 'TeamsLogo',
+      'outlook': 'OutlookLogo',
+      'onenote': 'OneNoteLogo',
+      'sharepoint': 'SharepointLogo',
+      'project': 'ProjectLogo',
+      'yammer': 'YammerLogo',
+      'tutorial': 'ReadingMode',
+      'management': 'AccountManagement',
+      'add': 'Add',
+      'remove': 'Remove',
+      'ms': 'MicrosoftLogo',
+      'pdf': 'PDF',
+      'link': 'Link',
+      'document': 'Document',
+      'folder': 'FabricFolder',
+      'calendar': 'Calendar',
+      'mail': 'Mail',
+      'people': 'People',
+      'task': 'TaskLogo',
+      'search': 'Search',
+      'settings': 'Settings',
+      'help': 'Help'
+    };
+
+    for (const key in iconMap) {
+      if (titleLower.indexOf(key) !== -1) {
+        return iconMap[key];
+      }
+    }
+
+    return 'Link';
+  };
 
   const loadLinkItems = useCallback(async () => {
     try {
@@ -34,7 +81,7 @@ const IntranetQuickLink: React.FC<IIntranetQuickLinkProps> = (props) => {
       const items: ILinkItem[] = await spRef.current.web.lists
         .getByTitle(props.listTitle)
         .items
-        .select("Id", "Title", "Link", "Status")
+        .select("Id", "Title", "Link", "Status", "IconName")
         .filter("Status eq 1")
         .orderBy("Created", false)();
 
@@ -49,7 +96,8 @@ const IntranetQuickLink: React.FC<IIntranetQuickLinkProps> = (props) => {
         
         return {
           ...item,
-          Link: linkUrl
+          Link: linkUrl,
+          IconName: item.IconName || getIconName(item.Title || '')
         };
       });
      
@@ -61,7 +109,7 @@ const IntranetQuickLink: React.FC<IIntranetQuickLinkProps> = (props) => {
       setErrorMessage(`Failed to load link items.`);
     }
   }, [props.listTitle]);
-  
+
   useEffect(() => {    
     spRef.current = spfi().using(SPFx(props.context));
     void loadLinkItems();
@@ -72,6 +120,7 @@ const IntranetQuickLink: React.FC<IIntranetQuickLinkProps> = (props) => {
       <div className={styles.intranetQuickLink}>
         <div className={styles.container}>
           <div className={styles.loadingContainer}>
+            <div className={styles.spinner}></div>
             <div className={styles.loadingText}>Loading quick links...</div>
           </div>
         </div>
@@ -100,21 +149,24 @@ const IntranetQuickLink: React.FC<IIntranetQuickLinkProps> = (props) => {
     );
   }
 
-  // Limit to maxRows
-  const displayedItems = linkItems.slice(0, maxRows);
+  // Limit to maxItems
+  const displayedItems = linkItems.slice(0, maxItems);
 
   return (
     <div className={styles.intranetQuickLink}>
       <div className={styles.container}>
-        {/* Apply header color */}
-        <h1 
-          className={styles.title}
-          style={{ color: headerColor }}
-        >
-          QUICK LINKS
-        </h1>
+        {/* Header */}
+        <div className={styles.header}>
+          <h1 
+            className={styles.title}
+            style={{ color: headerColor }}
+          >
+            QUICK LINKS
+          </h1>
+        </div>
 
-        <div className={styles.linksList}>
+        {/* Grid Container */}
+        <div className={styles.gridContainer}>
           {displayedItems.length === 0 ? (
             <div className={styles.noItems}>
               <Icon iconName="Link" className={styles.noItemsIcon} />
@@ -124,29 +176,43 @@ const IntranetQuickLink: React.FC<IIntranetQuickLinkProps> = (props) => {
               </div>
             </div>
           ) : (
-            displayedItems.map((item: ILinkItem, index: number) => {
-              // Determine if row is even or odd for alternating colors
-              const isEvenRow = index % 2 === 0;
-              const rowBgColor = isEvenRow ? rowColor1 : rowColor2;
-              const rowHoverColor = isEvenRow ? rowHoverColor1 : rowHoverColor2;
-
-              return (
+            <div 
+              className={styles.grid}
+              style={{ 
+                gridTemplateColumns: `repeat(auto-fill, minmax(${100/itemsPerRow}%, 1fr))`,
+                maxHeight: maxItems > 8 ? '500px' : 'auto' // Only add scroll if many items
+              }}
+            >
+              {displayedItems.map((item: ILinkItem) => (
                 <a
                   key={item.Id}
                   href={typeof item.Link === 'string' ? item.Link : item.Link?.Url || "#"}
-                  className={styles.linkItem}
+                  className={styles.gridItem}
                   style={{
-                    backgroundColor: rowBgColor,
-                    color: rowTextColor,
-                    '--row-hover-color': rowHoverColor
+                    backgroundColor: itemBgColor,
+                    color: itemTextColor,
+                    '--item-hover-color': itemHoverColor,
+                    '--icon-color': iconColor,
+                    '--border-color': borderColor,
+                    border: showBorder ? `1px solid ${borderColor}` : 'none'
                   } as React.CSSProperties}
                   target='_blank'
                   rel="noopener noreferrer"
+                  title={item.Title}
                 >
-                  {item.Title}
+                  <div className={styles.itemIcon}>
+                    <Icon 
+                      iconName={item.IconName || 'Link'} 
+                      className={styles.icon}
+                      style={{ color: iconColor }}
+                    />
+                  </div>
+                  <div className={styles.itemTitle}>
+                    {item.Title}
+                  </div>
                 </a>
-              );
-            })
+              ))}
+            </div>
           )}
         </div>
       </div>

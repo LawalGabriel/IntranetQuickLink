@@ -1,34 +1,31 @@
-import { WebPartContext } from "@microsoft/sp-webpart-base";
-
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface IIntranetQuickLinkProps {
   description: string;
   isDarkTheme: boolean;
   environmentMessage: string;
   hasTeamsContext: boolean;
   userDisplayName: string;
-  context: WebPartContext;
   listTitle: string;
-  headerColor: string;
-  rowColor1: string;
-  rowColor2: string;
-  rowTextColor: string;
-  rowHoverColor1: string;
-  rowHoverColor2: string;
-  maxRows: number;
-
+  context: any;
+  
+  // Color properties
+  headerColor?: string;
+  itemBgColor?: string;
+  itemTextColor?: string;
+  itemHoverColor?: string;
+  iconColor?: string;
+  borderColor?: string;
+  
+  // Display properties
+  maxItems?: number;
+  itemsPerRow?: number;
+  showBorder?: boolean;
 }
 
 export interface ILinkItem {
-  Title: string;
-  Link: string | { Url: string; Description?: string } ;
-  Status?: boolean;
   Id: number;
-  Created: string;
-  Author: {
-   title: string; 
-   id: number;}
-  
-   ;
-
+  Title: string;
+  Link: string | { Url: string };
+  Status: number;
+  IconName?: string;
 }
