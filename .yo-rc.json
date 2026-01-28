@@ -1,0 +1,21 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "18.20.5",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.24.0"
+    },
+    "version": "1.20.0",
+    "libraryName": "intranet-quick-link",
+    "libraryId": "cdcbb251-0a67-4041-8a62-b3d4862b5ad0",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "intranet-quick-link",
+    "solutionShortDescription": "intranet-quick-link description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

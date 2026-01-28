@@ -1,0 +1,138 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+
+.intranetQuickLink {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
+  .container {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .title {
+    font-size: 18px;
+    font-weight: 600;
+    // color will be set inline from props
+    margin: 0 0 15px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+  }
+
+  .linksList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 200px; /* Height for 4 rows */
+    overflow-y: auto;
+    padding-right: 4px;
+    
+    /* Custom scrollbar */
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 3px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 3px;
+    }
+  }
+
+  .linkItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    padding: 12px;
+    // background-color and color will be set inline from props
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    text-align: center;
+    min-height: 44px;
+
+    &:hover {
+      background-color: var(--row-hover-color, #f3f2f1) !important;
+      border-color: #c8c6c4;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  .spinner {
+    border: 4px solid rgba(0, 120, 212, 0.1);
+    border-left-color: #0078d4;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+  }
+
+  .loadingText {
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .retryButton {
+    background-color: #0078d4;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 15px;
+  }
+
+  .noItems {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+    text-align: center;
+  }
+
+  .noItemsIcon {
+    font-size: 36px;
+    color: #adb5bd;
+    margin-bottom: 10px;
+  }
+
+  .noItemsText {
+    font-size: 16px;
+    font-weight: 600;
+    color: #6c757d;
+    margin-bottom: 5px;
+  }
+
+  .noItemsSubtext {
+    font-size: 13px;
+    color: #adb5bd;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+}
