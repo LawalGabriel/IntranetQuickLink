@@ -26,7 +26,11 @@ const IntranetQuickLink: React.FC<IIntranetQuickLinkProps> = (props) => {
   const itemHoverColor = props.itemHoverColor || '#f3f2f1';
   const iconColor = props.iconColor || '#0078d4';
   const borderColor = props.borderColor || '#e1e1e1';
-  const showBorder = props.showBorder !== false; // default to true
+  const showBorder = props.showBorder !== false; // default to true,
+    const headerBgColor = props.headerBgColor || '#f8f9fa';
+  const headerTitle = props.headerTitle || 'QUICK LINKS';
+  const bodyBgColor = props.bodyBgColor || '#f8f9fa';
+  //const bodyTextColor = props.bodyTextColor || '#333333';
   
   // Grid configuration from props
   const maxItems = props.maxItems || 12;
@@ -153,15 +157,18 @@ const IntranetQuickLink: React.FC<IIntranetQuickLinkProps> = (props) => {
   const displayedItems = linkItems.slice(0, maxItems);
 
   return (
-    <div className={styles.intranetQuickLink}>
+    
+    <div className={styles.intranetQuickLink}
+    style={{ backgroundColor: bodyBgColor }} >
       <div className={styles.container}>
         {/* Header */}
-        <div className={styles.header}>
+        <div className={styles.header}
+         style={{ backgroundColor: headerBgColor }}>
           <h1 
             className={styles.title}
             style={{ color: headerColor }}
           >
-            QUICK LINKS
+            {headerTitle}
           </h1>
         </div>
 

@@ -7,6 +7,10 @@ export interface IIntranetQuickLinkProps {
   userDisplayName: string;
   listTitle: string;
   context: any;
+  headerBgColor: string; 
+  headerTitle: string;    
+  bodyBgColor: string; 
+  bodyTextColor: string; 
   
   // Color properties
   headerColor?: string;

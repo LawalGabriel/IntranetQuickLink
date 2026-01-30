@@ -15,6 +15,10 @@ import IntranetQuickLink from './components/IntranetQuickLink';
 import { IIntranetQuickLinkProps } from './components/IIntranetQuickLinkProps';
 
 export interface IIntranetQuickLinkWebPartProps {
+  bodyTextColor: string;
+  headerTitle: string;
+  headerBgColor: string;
+  bodyBgColor: string;
   description: string;
   listTitle: string;
   headerColor: string;
@@ -51,8 +55,13 @@ export default class IntranetQuickLinkWebPart extends BaseClientSideWebPart<IInt
         iconColor: this.properties.iconColor || "#0078d4",
         maxItems: this.properties.maxItems || 12,
         itemsPerRow: this.properties.itemsPerRow || 4,
-        showBorder: this.properties.showBorder !== false, // default to true
-        borderColor: this.properties.borderColor || "#e1e1e1"
+        showBorder: this.properties.showBorder !== false, 
+        borderColor: this.properties.borderColor || "#e1e1e1",
+        headerBgColor: this.properties.headerBgColor || "#f8f9fa", 
+      headerTitle: this.properties.headerTitle || "QUICK LINKS", 
+      bodyBgColor: this.properties.bodyBgColor || "#f8f9fa",
+      bodyTextColor: this.properties.bodyTextColor || "#333333"
+         
       }
     );
 
@@ -154,91 +163,107 @@ export default class IntranetQuickLinkWebPart extends BaseClientSideWebPart<IInt
     return Version.parse('1.0');
   }
 
-  protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
-    return {
-      pages: [
-        {
-          header: {
-            description: strings.PropertyPaneDescription
+ protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+  return {
+    pages: [
+      {
+        header: {
+          description: strings.PropertyPaneDescription
+        },
+        groups: [
+          {
+            groupName: strings.BasicGroupName,
+            groupFields: [
+              PropertyPaneTextField('listTitle', {
+                label: 'List Title',
+                value: this.properties.listTitle || 'QuickLink',
+                description: 'Enter the name of the SharePoint list containing quick links'
+              }),
+              PropertyPaneTextField('description', {
+                label: strings.DescriptionFieldLabel,
+                value: this.properties.description
+              }),
+              // NEW: Header Title Field
+              PropertyPaneTextField('headerTitle', {
+                label: 'Header Title',
+                description: 'Enter the title text for the header',
+                value: this.properties.headerTitle || 'QUICK LINKS'
+              })
+            ]
           },
-          groups: [
-            {
-              groupName: strings.BasicGroupName,
-              groupFields: [
-                PropertyPaneTextField('listTitle', {
-                  label: 'List Title',
-                  value: this.properties.listTitle || 'QuickLink',
-                  description: 'Enter the name of the SharePoint list containing quick links'
-                }),
-                PropertyPaneTextField('description', {
-                  label: strings.DescriptionFieldLabel,
-                  value: this.properties.description
-                })
-              ]
-            },
-            {
-              groupName: 'Display Settings',
-              groupFields: [
-                PropertyPaneSlider('maxItems', {
-                  label: 'Maximum Items to Display',
-                  min: 1,
-                  max: 50,
-                  step: 1,
-                  value: this.properties.maxItems || 12,
-                  showValue: true
-                }),
-                PropertyPaneSlider('itemsPerRow', {
-                  label: 'Items Per Row (Desktop)',
-                  min: 2,
-                  max: 6,
-                  step: 1,
-                  value: this.properties.itemsPerRow || 4,
-                  showValue: true
-                }),
-                PropertyPaneToggle('showBorder', {
-                  label: 'Show Item Borders',
-                  checked: this.properties.showBorder !== false
-                })
-              ]
-            },
-            {
-              groupName: 'Color Settings',
-              groupFields: [
-                PropertyPaneTextField('headerColor', {
-                  label: 'Header Text Color',
-                  description: 'Enter hex color code (e.g., #333333)',
-                  value: this.properties.headerColor || '#333333'
-                }),
-                PropertyPaneTextField('itemBgColor', {
-                  label: 'Item Background Color',
-                  description: 'Enter hex color code (e.g., #FFFFFF)',
-                  value: this.properties.itemBgColor || '#FFFFFF'
-                }),
-                PropertyPaneTextField('itemTextColor', {
-                  label: 'Item Text Color',
-                  description: 'Enter hex color code (e.g., #333333)',
-                  value: this.properties.itemTextColor || '#333333'
-                }),
-                PropertyPaneTextField('itemHoverColor', {
-                  label: 'Item Hover Color',
-                  description: 'Enter hex color code (e.g., #F3F2F1)',
-                  value: this.properties.itemHoverColor || '#F3F2F1'
-                }),
-                PropertyPaneTextField('iconColor', {
-                  label: 'Icon Color',
-                  description: 'Enter hex color code (e.g., #0078D4)',
-                  value: this.properties.iconColor || '#0078D4'
-                }),
-                PropertyPaneTextField('borderColor', {
-                  label: 'Border Color',
-                  description: 'Enter hex color code (e.g., #E1E1E1)',
-                  value: this.properties.borderColor || '#E1E1E1'
-                })
-              ]
-            }
-          ]
-        }
-      ]
-    };
-  }
+          {
+            groupName: 'Display Settings',
+            groupFields: [
+              PropertyPaneSlider('maxItems', {
+                label: 'Maximum Items to Display',
+                min: 1,
+                max: 50,
+                step: 1,
+                value: this.properties.maxItems || 12,
+                showValue: true
+              }),
+              PropertyPaneSlider('itemsPerRow', {
+                label: 'Items Per Row (Desktop)',
+                min: 2,
+                max: 6,
+                step: 1,
+                value: this.properties.itemsPerRow || 4,
+                showValue: true
+              }),
+              PropertyPaneToggle('showBorder', {
+                label: 'Show Item Borders',
+                checked: this.properties.showBorder !== false
+              })
+            ]
+          },
+          {
+            groupName: 'Color Settings',
+            groupFields: [
+              PropertyPaneTextField('headerBgColor', { // NEW: Header Background Color
+                label: 'Header Background Color',
+                description: 'Enter hex color code (e.g., #f8f9fa)',
+                value: this.properties.headerBgColor || '#f8f9fa'
+              }),
+              PropertyPaneTextField('headerColor', {
+                label: 'Header Text Color',
+                description: 'Enter hex color code (e.g., #333333)',
+                value: this.properties.headerColor || '#333333'
+              }),
+              PropertyPaneTextField('bodyBgColor', { // NEW: Body Background Color
+                label: 'Body Background Color',
+                description: 'Enter hex color code for the container background (e.g., #f8f9fa)',
+                value: this.properties.bodyBgColor || '#f8f9fa'
+              }),
+              PropertyPaneTextField('itemBgColor', {
+                label: 'Item Background Color',
+                description: 'Enter hex color code (e.g., #FFFFFF)',
+                value: this.properties.itemBgColor || '#FFFFFF'
+              }),
+              PropertyPaneTextField('itemTextColor', {
+                label: 'Item Text Color',
+                description: 'Enter hex color code (e.g., #333333)',
+                value: this.properties.itemTextColor || '#333333'
+              }),
+              PropertyPaneTextField('itemHoverColor', {
+                label: 'Item Hover Color',
+                description: 'Enter hex color code (e.g., #F3F2F1)',
+                value: this.properties.itemHoverColor || '#F3F2F1'
+              }),
+              PropertyPaneTextField('iconColor', {
+                label: 'Icon Color',
+                description: 'Enter hex color code (e.g., #0078D4)',
+                value: this.properties.iconColor || '#0078D4'
+              }),
+              PropertyPaneTextField('borderColor', {
+                label: 'Border Color',
+                description: 'Enter hex color code (e.g., #E1E1E1)',
+                value: this.properties.borderColor || '#E1E1E1'
+              })
+            ]
+          }
+        ]
+      }
+    ]
+  };
+}
 }
