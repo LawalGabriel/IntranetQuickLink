@@ -24,6 +24,10 @@ export interface IIntranetQuickLinkProps {
   maxItems?: number;
   itemsPerRow?: number;
   showBorder?: boolean;
+
+  headerFontSize?: string;
+  headerFontWeight?: string;
+  headerHeight?: string;
 }
 
 export interface ILinkItem {
@@ -32,4 +36,27 @@ export interface ILinkItem {
   Link: string | { Url: string };
   Status: number;
   IconName?: string;
+}
+
+export interface IIntranetQuickLinkWebPartProps {
+  bodyTextColor: string;
+  headerTitle: string;
+  headerBgColor: string;
+  bodyBgColor: string;
+  description: string;
+  listTitle: string;
+  headerColor: string;
+  itemBgColor: string;
+  itemTextColor: string;
+  itemHoverColor: string;
+  iconColor: string;
+  maxItems: number;
+  itemsPerRow: number;
+  showBorder: boolean;
+  borderColor: string;
+  
+  // NEW: Header styling properties
+  headerFontSize: string;
+  headerFontWeight: string;
+  headerHeight: string;
 }

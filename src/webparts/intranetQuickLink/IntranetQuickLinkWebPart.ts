@@ -15,6 +15,9 @@ import IntranetQuickLink from './components/IntranetQuickLink';
 import { IIntranetQuickLinkProps } from './components/IIntranetQuickLinkProps';
 
 export interface IIntranetQuickLinkWebPartProps {
+  headerHeight: string;
+  headerFontWeight: string;
+  headerFontSize: string;
   bodyTextColor: string;
   headerTitle: string;
   headerBgColor: string;
@@ -38,35 +41,39 @@ export default class IntranetQuickLinkWebPart extends BaseClientSideWebPart<IInt
   private _environmentMessage: string = '';
 
   public render(): void {
-    const element: React.ReactElement<IIntranetQuickLinkProps> = React.createElement(
-      IntranetQuickLink,
-      {
-        description: this.properties.description,
-        isDarkTheme: this._isDarkTheme,
-        environmentMessage: this._environmentMessage,
-        hasTeamsContext: !!this.context.sdks.microsoftTeams,
-        userDisplayName: this.context.pageContext.user.displayName,
-        context: this.context,
-        listTitle: this.properties.listTitle || "QuickLink",
-        headerColor: this.properties.headerColor || "#333333",
-        itemBgColor: this.properties.itemBgColor || "#ffffff",
-        itemTextColor: this.properties.itemTextColor || "#333333",
-        itemHoverColor: this.properties.itemHoverColor || "#f3f2f1",
-        iconColor: this.properties.iconColor || "#0078d4",
-        maxItems: this.properties.maxItems || 12,
-        itemsPerRow: this.properties.itemsPerRow || 4,
-        showBorder: this.properties.showBorder !== false, 
-        borderColor: this.properties.borderColor || "#e1e1e1",
-        headerBgColor: this.properties.headerBgColor || "#f8f9fa", 
+  const element: React.ReactElement<IIntranetQuickLinkProps> = React.createElement(
+    IntranetQuickLink,
+    {
+      description: this.properties.description,
+      isDarkTheme: this._isDarkTheme,
+      environmentMessage: this._environmentMessage,
+      hasTeamsContext: !!this.context.sdks.microsoftTeams,
+      userDisplayName: this.context.pageContext.user.displayName,
+      context: this.context,
+      listTitle: this.properties.listTitle || "QuickLink",
+      headerColor: this.properties.headerColor || "#333333",
+      itemBgColor: this.properties.itemBgColor || "#ffffff",
+      itemTextColor: this.properties.itemTextColor || "#333333",
+      itemHoverColor: this.properties.itemHoverColor || "#f3f2f1",
+      iconColor: this.properties.iconColor || "#0078d4",
+      maxItems: this.properties.maxItems || 12,
+      itemsPerRow: this.properties.itemsPerRow || 4,
+      showBorder: this.properties.showBorder !== false, 
+      borderColor: this.properties.borderColor || "#e1e1e1",
+      headerBgColor: this.properties.headerBgColor || "#f8f9fa", 
       headerTitle: this.properties.headerTitle || "QUICK LINKS", 
       bodyBgColor: this.properties.bodyBgColor || "#f8f9fa",
-      bodyTextColor: this.properties.bodyTextColor || "#333333"
-         
-      }
-    );
+      bodyTextColor: this.properties.bodyTextColor || "#333333",
+      // NEW: Header styling properties
+      headerFontSize: this.properties.headerFontSize || "22px",
+      headerFontWeight: this.properties.headerFontWeight || "600",
+      headerHeight: this.properties.headerHeight || "auto"
+      
+    }
+  );
 
-    ReactDom.render(element, this.domElement);
-  }
+  ReactDom.render(element, this.domElement);
+}
 
   protected onInit(): Promise<void> {
     // Ensure Default Chrome Is Disabled
@@ -163,7 +170,7 @@ export default class IntranetQuickLinkWebPart extends BaseClientSideWebPart<IInt
     return Version.parse('1.0');
   }
 
- protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
   return {
     pages: [
       {
@@ -183,11 +190,30 @@ export default class IntranetQuickLinkWebPart extends BaseClientSideWebPart<IInt
                 label: strings.DescriptionFieldLabel,
                 value: this.properties.description
               }),
-              // NEW: Header Title Field
               PropertyPaneTextField('headerTitle', {
                 label: 'Header Title',
                 description: 'Enter the title text for the header',
                 value: this.properties.headerTitle || 'QUICK LINKS'
+              })
+            ]
+          },
+          {
+            groupName: 'Header Styling', // NEW GROUP
+            groupFields: [
+              PropertyPaneTextField('headerFontSize', {
+                label: 'Header Font Size',
+                description: 'Enter font size with unit (e.g., 22px, 1.5rem, 2em)',
+                value: this.properties.headerFontSize || '22px'
+              }),
+              PropertyPaneTextField('headerFontWeight', {
+                label: 'Header Font Weight',
+                description: 'Enter font weight (e.g., 400, 600, bold, normal)',
+                value: this.properties.headerFontWeight || '600'
+              }),
+              PropertyPaneTextField('headerHeight', {
+                label: 'Header Height',
+                description: 'Enter height with unit (e.g., 50px, 3rem, auto)',
+                value: this.properties.headerHeight || 'auto'
               })
             ]
           },
@@ -219,7 +245,7 @@ export default class IntranetQuickLinkWebPart extends BaseClientSideWebPart<IInt
           {
             groupName: 'Color Settings',
             groupFields: [
-              PropertyPaneTextField('headerBgColor', { // NEW: Header Background Color
+              PropertyPaneTextField('headerBgColor', {
                 label: 'Header Background Color',
                 description: 'Enter hex color code (e.g., #f8f9fa)',
                 value: this.properties.headerBgColor || '#f8f9fa'
@@ -229,7 +255,7 @@ export default class IntranetQuickLinkWebPart extends BaseClientSideWebPart<IInt
                 description: 'Enter hex color code (e.g., #333333)',
                 value: this.properties.headerColor || '#333333'
               }),
-              PropertyPaneTextField('bodyBgColor', { // NEW: Body Background Color
+              PropertyPaneTextField('bodyBgColor', {
                 label: 'Body Background Color',
                 description: 'Enter hex color code for the container background (e.g., #f8f9fa)',
                 value: this.properties.bodyBgColor || '#f8f9fa'

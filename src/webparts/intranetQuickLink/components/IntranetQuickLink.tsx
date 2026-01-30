@@ -30,6 +30,9 @@ const IntranetQuickLink: React.FC<IIntranetQuickLinkProps> = (props) => {
     const headerBgColor = props.headerBgColor || '#f8f9fa';
   const headerTitle = props.headerTitle || 'QUICK LINKS';
   const bodyBgColor = props.bodyBgColor || '#f8f9fa';
+  const headerFontSize = props.headerFontSize || '24px';
+  const headerFontWeight = props.headerFontWeight || '600';
+  const headerHeight = props.headerHeight || 'auto';
   //const bodyTextColor = props.bodyTextColor || '#333333';
   
   // Grid configuration from props
@@ -166,7 +169,12 @@ const IntranetQuickLink: React.FC<IIntranetQuickLinkProps> = (props) => {
          style={{ backgroundColor: headerBgColor }}>
           <h1 
             className={styles.title}
-            style={{ color: headerColor }}
+            style={{ color: headerColor,
+              fontSize: headerFontSize,
+            fontWeight: headerFontWeight,
+            height: headerHeight,
+            minHeight: headerHeight === 'auto' ? 'auto' : headerHeight
+             }}
           >
             {headerTitle}
           </h1>

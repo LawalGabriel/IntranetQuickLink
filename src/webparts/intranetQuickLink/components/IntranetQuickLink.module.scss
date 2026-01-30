@@ -25,14 +25,25 @@
   }
 
   .title {
-    font-size: 22px; // Slightly larger
-    font-weight: 600;
-    margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid rgba(0, 120, 212, 0.2);
+  font-size: 22px; // This will be overridden by inline style
+  font-weight: 600; // This will be overridden by inline style
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgba(0, 120, 212, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  line-height: 1.2; // Added for better text alignment
+  
+  // Responsive adjustments
+  @media (max-width: 640px) {
+    padding-bottom: 8px;
+    letter-spacing: 0.3px;
   }
+}
 
   .gridContainer {
     width: 100%;
